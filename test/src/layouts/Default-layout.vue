@@ -9,28 +9,28 @@
     <div>
       <div class="lessons-list">
         <ul v-if="posts && posts.length">
-          <router-link
+          <li
+            v-for="(post, index) of posts"
             :class="isActive ? 'lesson-link-active' : 'lesson-link'"
-            @click="isActive = true"
-            v-for="index of posts"
-            :key="index"
-            :to="index.title"
+            @click="console.log(posts[index].video_url)"
+            :key="post"
           >
-            <p>
-              <strong>{{ index.title }}</strong>
-            </p>
-            <p>{{ index.subtitle }}</p>
-          </router-link>
+            <router-link :to="post.title">
+              <p>
+                <strong>{{ post.title }}</strong>
+              </p>
+              <p>{{ post.subtitle }}</p>
+            </router-link>
+          </li>
         </ul>
 
         <ul v-if="errors && errors.length">
-          <li v-for="index of errors" :key="index">
-            {{ index.message }}
+          <li v-for="(index, error) of errors" :key="index">
+            {{ error.message }}
           </li>
         </ul>
       </div>
       <section class="content">
-        <!--Элемент, который при отрисовке будет заменен на ваш view-->
         <slot />
       </section>
     </div>
@@ -44,7 +44,7 @@ export default {
   name: "Default-layout",
 
   data: () => ({
-    isActive: false,
+    isActive: 0,
     posts: [],
     errors: [],
   }),
@@ -92,6 +92,24 @@ export default {
   justify-content: end;
 }
 
+.lesson-link-active {
+  background: orange !important;
+}
+
+.lesson-link {
+  width: 400px;
+  height: 70px;
+  background: rgb(128, 128, 128, 0.5);
+  display: block;
+}
+
+.lesson-link > a {
+  text-decoration: none;
+  color: whitesmoke;
+  display: block;
+  height: 100%;
+}
+
 footer {
   background-color: blue;
   height: 70px;
@@ -104,11 +122,11 @@ ul {
   list-style: none;
   margin: 0;
   color: yellow;
+  padding: 0;
 }
 
 li {
   color: yellow;
-  display: inline;
   margin: 0 5px;
 }
 
