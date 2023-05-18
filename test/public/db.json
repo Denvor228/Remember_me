@@ -1,0 +1,41 @@
+[
+    {
+        "title": "Lesson1",
+        "subtitle": "Lesson1 subtitle",
+        "video_url": "https://youtu.be/v4qymvKaWaA",
+        "video_time": 60,
+        "description": "test description"
+    },
+
+    {
+        "title": "Lesson2",
+        "subtitle": "Lesson2 subtitle",
+        "video_url": "https://youtu.be/FIjXrN8w6_k",
+        "video_time": 60,
+        "description": "test description"
+    },
+
+    {
+        "title": "Lesson3",
+        "subtitle": "Lesson3 subtitle",
+        "video_url": "https://youtu.be/FIjXrN8w6_k",
+        "video_time": 60,
+        "description": "test description"
+    },
+
+    {
+        "title": "Lesson4",
+        "subtitle": "Lesson4 subtitle",
+        "video_url": "https://youtu.be/FIjXrN8w6_k",
+        "video_time": 60,
+        "description": "test description"
+    },
+
+    {
+        "title": "Lesson5",
+        "subtitle": "Lesson5 subtitle",
+        "video_url": "https://youtu.be/FIjXrN8w6_k",
+        "video_time": 60,
+        "description": "test description"
+    }
+]
