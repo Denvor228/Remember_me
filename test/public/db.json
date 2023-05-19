@@ -1,41 +1,41 @@
 [
     {
-        "title": "Lesson1",
-        "subtitle": "Lesson1 subtitle",
+        "title": "Епізод 1",
+        "subtitle": "Знайомство зі спікерами",
         "video_url": "https://youtu.be/v4qymvKaWaA",
-        "video_time": 60,
-        "description": "test description"
+        "video_time": 1,
+        "description": "1. 1+ безкоштовних методів як знайти собі клієнта."
     },
 
     {
-        "title": "Lesson2",
-        "subtitle": "Lesson2 subtitle",
+        "title": "Епізод 2",
+        "subtitle": "Хто такий таргетолог",
         "video_url": "https://youtu.be/FIjXrN8w6_k",
-        "video_time": 60,
-        "description": "test description"
+        "video_time": 1,
+        "description": "1. 2+ безкоштовних методів як знайти собі клієнта."
     },
 
     {
-        "title": "Lesson3",
-        "subtitle": "Lesson3 subtitle",
-        "video_url": "https://youtu.be/FIjXrN8w6_k",
-        "video_time": 60,
-        "description": "test description"
+        "title": "Епізод 3",
+        "subtitle": "Пошук перших клієнтів",
+        "video_url": "https://www.youtube.com/watch?v=in8MvEpawYc",
+        "video_time": 1,
+        "description": "1. 3+ безкоштовних методів як знайти собі клієнта."
     },
 
     {
-        "title": "Lesson4",
-        "subtitle": "Lesson4 subtitle",
-        "video_url": "https://youtu.be/FIjXrN8w6_k",
-        "video_time": 60,
-        "description": "test description"
+        "title": "Епізод 4",
+        "subtitle": "Налаштування реклами",
+        "video_url": "https://www.youtube.com/watch?v=lxf3M_eWwJY",
+        "video_time": 1,
+        "description": "1. 4+ безкоштовних методів як знайти собі клієнта."
     },
 
     {
-        "title": "Lesson5",
-        "subtitle": "Lesson5 subtitle",
-        "video_url": "https://youtu.be/FIjXrN8w6_k",
-        "video_time": 60,
-        "description": "test description"
+        "title": "Епізод 5",
+        "subtitle": "Ведення клієнта",
+        "video_url": "https://www.youtube.com/watch?v=TFj97-f3tjI",
+        "video_time": 1,
+        "description": "1. 5+ безкоштовних методів як знайти собі клієнта."
     }
 ]

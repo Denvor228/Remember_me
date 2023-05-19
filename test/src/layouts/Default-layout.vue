@@ -6,15 +6,31 @@
       Як заробляти <span class="orange">від $100</span> на день на налаштуванні
       рекламних кампаній Facebook+Instagram
     </h2>
-    <div>
+    <div class="lesson-title">
+      <h3 class="title">{{ title }}</h3>
+      <p class="subtitle">{{ subtitle }}</p>
+    </div>
+    <div class="lesson-block">
+      <YouTube
+        class="lesson-video"
+        :src="videoUrl"
+        :autoplay="1"
+        @ready="onReady"
+        ref="youtube"
+      />
       <div class="lessons-list">
         <ul v-if="posts && posts.length">
           <li
             v-for="(post, index) of posts"
-            :class="isActive ? 'lesson-link-active' : 'lesson-link'"
-            @click="console.log(posts[index].video_url)"
+            class="lesson-link"
+            :class="
+              index === currentElemnt ? 'lesson-link-active' : 'lesson-link'
+            "
+            :disabled="index !== currentElemnt"
+            @click="changeLesson(index)"
             :key="post"
           >
+            <p class="background-image"></p>
             <router-link :to="post.title">
               <p>
                 <strong>{{ post.title }}</strong>
@@ -30,24 +46,53 @@
           </li>
         </ul>
       </div>
-      <section class="content">
-        <slot />
-      </section>
+    </div>
+    <div class="bottom-block">
+      <div class="lesson-block-description">
+        <h4 class="lesson-description-header">
+          У цьому епізоді ви дізнаєтесь:
+        </h4>
+        <p class="lesson-description">{{ description }}</p>
+      </div>
+      <div class="button-block">
+        <p class="button-description">
+          Вже переглянули? Отримайте доступ до наступного:
+        </p>
+        <button
+          class="next-lesson-button"
+          @click="
+            currentElemnt < posts.length - 1
+              ? changeLesson(currentElemnt + 1)
+              : false
+          "
+        >
+          Наступний епізод
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { defineComponent } from "vue";
+import YouTube from "vue3-youtube";
 
 export default {
   name: "Default-layout",
 
   data: () => ({
-    isActive: 0,
+    isActive: false,
     posts: [],
     errors: [],
+    videoUrl: "",
+    title: "",
+    subtitle: "",
+    description: "",
+    currentElemnt: "",
   }),
+
+  components: { YouTube },
 
   created() {
     axios
@@ -59,12 +104,32 @@ export default {
         this.erros.push(e);
       });
   },
+
+  updated() {
+    if (!this.videoUrl) {
+      this.changeLesson(0);
+    }
+  },
+
+  methods: {
+    changeLesson(index) {
+      this.videoUrl = this.posts[index].video_url;
+      this.title = this.posts[index].title;
+      this.description = this.posts[index].description;
+      this.subtitle = this.posts[index].subtitle;
+      this.currentElemnt = index;
+    },
+
+    onReady() {
+      this.$refs.youtube.playVideo();
+    },
+  },
 };
 </script>
 
 <style scoped>
 .container {
-  width: 90%;
+  width: 1200px;
   margin: auto;
 }
 
@@ -85,6 +150,37 @@ export default {
   color: orange;
 }
 
+.title {
+  color: orange;
+}
+
+.subtitle {
+  margin-left: 5px;
+}
+
+.lesson-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.lesson-block {
+  max-width: 85%;
+  margin: auto;
+  display: flex;
+  margin-top: 60px;
+}
+
+.background-image {
+  background-image: url(https://i.ytimg.com/vi/7b0maNVkwCE/hqdefault.jpg?s…AFwAcABBg==&rs=AOn4CLDaIy41J7S3zs1H-M5-86B594Eu5A);
+  margin: 0;
+  height: 64px;
+  width: 100px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .lessons-list {
   width: 100%;
   display: flex;
@@ -98,20 +194,69 @@ export default {
 
 .lesson-link {
   width: 400px;
-  height: 70px;
+  height: 64px;
   background: rgb(128, 128, 128, 0.5);
-  display: block;
+  display: flex;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.lesson-link a > p {
+  margin: 0;
 }
 
 .lesson-link > a {
   text-decoration: none;
   color: whitesmoke;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: 100%;
+  width: 200px;
+  text-align: center;
+  margin-left: 35px;
+}
+
+.lesson-block-description {
+  margin-top: 50px;
+  width: 75%;
+  margin: auto;
+  text-align: left;
+}
+
+.bottom-block {
+  max-width: 85%;
+  display: flex;
+  margin: auto;
+  margin-top: 50px;
+  justify-content: space-between;
+}
+
+.lesson-description {
+  width: 50%;
+}
+
+.lesson-description-header {
+  margin-top: 0;
+  color: orange;
+  font-size: 30px;
+}
+
+.button-description {
+  margin: 0;
+}
+
+.next-lesson-button {
+  padding: 0;
+  border: none;
+  background-color: orange;
+  height: 60px;
+  width: 250px;
+  color: white;
+  margin-top: 30px;
 }
 
 footer {
-  background-color: blue;
   height: 70px;
 }
 
@@ -121,17 +266,14 @@ footer {
 ul {
   list-style: none;
   margin: 0;
-  color: yellow;
   padding: 0;
 }
 
 li {
-  color: yellow;
   margin: 0 5px;
 }
 
 .link {
-  color: yellow;
   text-decoration: none;
 }
 </style>
