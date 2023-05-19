@@ -183,7 +183,7 @@ export default {
 }
 
 .youtube-area {
-  padding: 10px;
+  padding: 0 30px 50px 0;
 }
 
 .lesson-title {
@@ -302,7 +302,7 @@ footer {
 ul {
   list-style: none;
   margin: 0;
-  padding: 10px;
+  padding: 0px;
 }
 
 li {
