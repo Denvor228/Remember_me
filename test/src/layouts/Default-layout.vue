@@ -11,32 +11,29 @@
       <p class="subtitle">{{ subtitle }}</p>
     </div>
     <div class="lesson-block">
-      <YouTube
-        class="lesson-video"
-        :src="videoUrl"
-        :autoplay="1"
-        @ready="onReady"
-        ref="youtube"
-      />
+      <div class="youtube-area" @click="timer ? stopTimer() : startTimer()">
+        <YouTube
+          class="lesson-video"
+          :src="videoUrl"
+          :autoplay="0"
+          @ready="onReady"
+          ref="youtube"
+        />
+      </div>
       <div class="lessons-list">
         <ul v-if="posts && posts.length">
           <li
             v-for="(post, index) of posts"
             class="lesson-link"
+            :id="index"
             :class="
               index === currentElemnt ? 'lesson-link-active' : 'lesson-link'
             "
-            :disabled="index !== currentElemnt"
-            @click="changeLesson(index)"
+            @click="disabled ? false : changeLesson(index)"
             :key="post"
           >
             <p class="background-image"></p>
-            <router-link :to="post.title">
-              <p>
-                <strong>{{ post.title }}</strong>
-              </p>
-              <p>{{ post.subtitle }}</p>
-            </router-link>
+            <p class="lesson-link-text">{{ post.subtitle }}</p>
           </li>
         </ul>
 
@@ -55,10 +52,11 @@
         <p class="lesson-description">{{ description }}</p>
       </div>
       <div class="button-block">
-        <p class="button-description">
+        <p v-if="!disabled" class="button-description">
           Вже переглянули? Отримайте доступ до наступного:
         </p>
         <button
+          v-if="!disabled"
           class="next-lesson-button"
           @click="
             currentElemnt < posts.length - 1
@@ -90,6 +88,9 @@ export default {
     subtitle: "",
     description: "",
     currentElemnt: "",
+    currentTime: "",
+    timer: null,
+    disabled: true,
   }),
 
   components: { YouTube },
@@ -118,10 +119,33 @@ export default {
       this.description = this.posts[index].description;
       this.subtitle = this.posts[index].subtitle;
       this.currentElemnt = index;
+      this.currentTime = this.posts[index].video_time;
+      if (index < 3) {
+        this.disabled = true;
+      }
     },
 
     onReady() {
       this.$refs.youtube.playVideo();
+    },
+
+    startTimer() {
+      this.timer = setInterval(() => {
+        this.currentTime--;
+        console.log(this.currentTime);
+      }, 1000);
+    },
+    stopTimer() {
+      clearTimeout(this.timer);
+    },
+  },
+
+  watch: {
+    currentTime(time) {
+      if (time === 0) {
+        this.stopTimer();
+        this.disabled = false;
+      }
     },
   },
 };
@@ -156,6 +180,10 @@ export default {
 
 .subtitle {
   margin-left: 5px;
+}
+
+.youtube-area {
+  padding: 10px;
 }
 
 .lesson-title {
@@ -205,13 +233,17 @@ export default {
   margin: 0;
 }
 
-.lesson-link > a {
+.disabled {
+  pointer-events: none;
+  background-color: rgb(51, 51, 51, 0.7);
+}
+
+.lesson-link-text {
   text-decoration: none;
   color: whitesmoke;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
   width: 200px;
   text-align: center;
   margin-left: 35px;
@@ -246,6 +278,10 @@ export default {
   margin: 0;
 }
 
+.button-block {
+  width: 30%;
+}
+
 .next-lesson-button {
   padding: 0;
   border: none;
@@ -266,7 +302,7 @@ footer {
 ul {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 10px;
 }
 
 li {
