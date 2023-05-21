@@ -109,7 +109,7 @@ export default {
 
   created() {
     axios
-      .get(`http://localhost:8081/db.json`)
+      .get(`http://localhost:8080/vue-pages/db.json`)
       .then((response) => {
         this.posts = response.data;
       })
