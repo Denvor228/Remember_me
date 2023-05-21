@@ -9,6 +9,6 @@ cd dist
 git init
 git add -A
 git commit -m 'New Deployment'
-git push -f git@github.com:Denvor228/Remember_me.git master: new-deplyment-branch
+git push -f git@github.com:Denvor228/Remember_me.git main
 
 cd -
