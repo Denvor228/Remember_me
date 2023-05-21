@@ -33,8 +33,9 @@
             :class="
               index === currentElemnt ? 'lesson-link-active' : 'lesson-link'
             "
-            @click="disabled ? false : changeLesson(index)"
+            @click="counter > index ? changeLesson(index) : false"
             :key="post"
+            :ref="index"
           >
             <p class="background-image"></p>
             <p class="lesson-link-text">{{ post.subtitle }}</p>
@@ -57,13 +58,17 @@
       </div>
       <div class="button-block">
         <p
-          v-if="!disabled && currentElemnt !== posts.length - 1"
+          v-if="
+            currentElemnt !== posts.length - 1 && counter >= currentElemnt + 1
+          "
           class="button-description"
         >
           Вже переглянули? Отримайте доступ до наступного:
         </p>
         <button
-          v-if="!disabled && currentElemnt !== posts.length - 1"
+          v-if="
+            currentElemnt !== posts.length - 1 && counter >= currentElemnt + 1
+          "
           class="next-lesson-button"
           @click="
             currentElemnt < posts.length - 1
@@ -86,7 +91,6 @@ export default {
   name: "Default-layout",
 
   data: () => ({
-    isActive: false,
     posts: [],
     errors: [],
     videoUrl: "",
@@ -97,14 +101,15 @@ export default {
     currentTime: "",
     currentStatus: "",
     timer: null,
-    disabled: true,
+    disabled: [],
+    counter: 0,
   }),
 
   components: { YouTube },
 
   created() {
     axios
-      .get(`http://localhost:8080/db.json`)
+      .get(`http://localhost:8081/db.json`)
       .then((response) => {
         this.posts = response.data;
       })
@@ -127,14 +132,10 @@ export default {
       this.subtitle = this.posts[index].subtitle;
       this.currentElemnt = index;
       this.currentTime = this.posts[index].video_time;
-      if (index < 3) {
-        this.disabled = true;
-      }
-      this.currentStatus;
     },
 
     startTimer() {
-      if (this.currentTime >= 0) {
+      if (this.currentTime !== 0) {
         this.timer = setInterval(() => {
           this.currentTime--;
           console.log(this.currentTime);
@@ -152,14 +153,12 @@ export default {
     currentTime(time) {
       if (time <= 0) {
         this.stopTimer();
-        this.disabled = false;
+        if (this.counter >= this.currentElemnt) {
+          this.counter += 1;
+          console.log(this.counter);
+        }
       }
     },
-    // currentStatus() {
-    //   if (this.$emit("changed", this.currentStatus)) {
-    //     console.log(this.currentStatus);
-    //   }
-    // },
   },
 };
 </script>
