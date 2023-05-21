@@ -11,12 +11,16 @@
       <p class="subtitle">{{ subtitle }}</p>
     </div>
     <div class="lesson-block">
-      <div class="youtube-area" @click="timer ? stopTimer() : startTimer()">
+      <div class="youtube-area">
         <YouTube
           class="lesson-video"
           :src="videoUrl"
-          :autoplay="0"
-          @ready="onReady"
+          :autoplay="1"
+          @state-change="
+            this.$refs.youtube.getPlayerState() === 1
+              ? startTimer()
+              : stopTimer()
+          "
           ref="youtube"
         />
       </div>
@@ -52,11 +56,14 @@
         <p class="lesson-description">{{ description }}</p>
       </div>
       <div class="button-block">
-        <p v-if="!disabled" class="button-description">
+        <p
+          v-if="!disabled && currentElemnt !== posts.length - 1"
+          class="button-description"
+        >
           Вже переглянули? Отримайте доступ до наступного:
         </p>
         <button
-          v-if="!disabled"
+          v-if="!disabled && currentElemnt !== posts.length - 1"
           class="next-lesson-button"
           @click="
             currentElemnt < posts.length - 1
@@ -73,7 +80,6 @@
 
 <script>
 import axios from "axios";
-import { defineComponent } from "vue";
 import YouTube from "vue3-youtube";
 
 export default {
@@ -89,6 +95,7 @@ export default {
     description: "",
     currentElemnt: "",
     currentTime: "",
+    currentStatus: "",
     timer: null,
     disabled: true,
   }),
@@ -97,7 +104,7 @@ export default {
 
   created() {
     axios
-      .get(`http://localhost:8081/db.json`)
+      .get(`http://localhost:8080/db.json`)
       .then((response) => {
         this.posts = response.data;
       })
@@ -123,30 +130,36 @@ export default {
       if (index < 3) {
         this.disabled = true;
       }
-    },
-
-    onReady() {
-      this.$refs.youtube.playVideo();
+      this.currentStatus;
     },
 
     startTimer() {
-      this.timer = setInterval(() => {
-        this.currentTime--;
-        console.log(this.currentTime);
-      }, 1000);
+      if (this.currentTime >= 0) {
+        this.timer = setInterval(() => {
+          this.currentTime--;
+          console.log(this.currentTime);
+        }, 1000);
+      }
     },
+
     stopTimer() {
       clearTimeout(this.timer);
+      this.timer = null;
     },
   },
 
   watch: {
     currentTime(time) {
-      if (time === 0) {
+      if (time <= 0) {
         this.stopTimer();
         this.disabled = false;
       }
     },
+    // currentStatus() {
+    //   if (this.$emit("changed", this.currentStatus)) {
+    //     console.log(this.currentStatus);
+    //   }
+    // },
   },
 };
 </script>
